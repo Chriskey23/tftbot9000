@@ -1,0 +1,3 @@
+def makeNextDecision():
+
+    return True
