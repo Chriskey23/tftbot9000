@@ -17,21 +17,72 @@ Should we just have it input by position or by a unit type?
 I think just position should be fine and have the bot handle 
 the whole thing?
 
+!!!Resolution of game window + resolution of monitor/display
+Will
+'''
+
+###!!!Resolution fo game window + resolution of montior/display
+###Effect where things will be. Will implement hardcoded for now
+#Potential solution is identifying common elements and getting
+#the rest of the positions later.
 '''
 def initAndCheckProperSettings():
     #Checks that the game is in proper resolution
     #and that the coloring is correct
+'''
+
+
 def buyExp():
-    
+    pyautogui.press('f')
+
 def rerollShop():
+    pyautogui.press('d')
 
-def buyXPosition():
+#Input everything to keep it funcitonal
+#Should I update and return the states too?
+def buyXPosition(pos,shopCoordinates, shopState, benchState, boardState, currentGold):
+    pyautogui.moveTo(pos)
+    #This has a slight delay so it registers in game
+    #.click() is not regetered in game
+    #I think its because it is inhumanly fast.
+    pyautogui.mouseDown();pyautogui.mouseUp()
 
-def dragXPosToYPos():
+
+
+def dragXPosToYPos(xCord, yCord):
 
 def sellXPos():
 
 def toggleHealthBars():
 
 def getGameState():
+    #Going to assume healthbars are on, will add a check funciton in the future.
+    imHealthBars = pyautogui.screenshot(region=())
+    pyautogui.press('c')
+    imNoHealthBars = pyautogui.screenshot(region=())
+    pyautogui.press('c')
 
+    #Will need to check things like carosel, armour, stage
+
+    boardChampions,benchChampions = getBoardState(imNoHealthBars)
+    shopState = getBenchState(imHealthBars)
+
+    #Returns itemBench as well as updating items for all units with items
+    itemBench, boardChampions = getItemState(itemBench, boardChampions, )
+
+    playerState = getPlayerState()
+
+
+
+    return (boardChampions,benchChampions,itemBench,shopState,playerState,gameStage)
+#We want to try and make it functional!
+#Can I evn make the control funcitons funcitonal?
+#I guess we could just have it carry out the operations
+#Whether they complete or not.
+#How costly is get gamestate going to be?
+#If it refreshes after each action
+#Then it could be expensive.
+#What we can do is only update where required.
+#So refreshing shop just checks that region.
+#So we begin round with stage, then after movement
+#We change, and then there is a verify if needed.

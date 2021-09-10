@@ -1,3 +1,4 @@
+
 def makeNextDecision():
 
     return True
