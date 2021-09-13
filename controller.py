@@ -49,12 +49,19 @@ def buyXPosition(pos,shopCoordinates, shopState, benchState, boardState, current
 
 
 
-def dragXPosToYPos(xCord, yCord):
+def dragXPosToYPos(xCord, yCord, boardState, benchState):
+    pyautogui.moveTo(xCord[0], xCord[1])
+    pyautogui.dragTo(yCord[0], yCord[1],0.12,pyautogui.easeInQuad, button="left", )
+    
 
-def sellXPos():
+def sellXPos(xCord, boardState, benchState, currentGold):
+    pyautogui.moveTo(xCord[0], xCord[1])
+    pyautogui.press('e')
 
 def toggleHealthBars():
+    pyautogui.press('c')
 
+'''
 def getGameState():
     #Going to assume healthbars are on, will add a check funciton in the future.
     imHealthBars = pyautogui.screenshot(region=())
@@ -75,6 +82,7 @@ def getGameState():
 
 
     return (boardChampions,benchChampions,itemBench,shopState,playerState,gameStage)
+'''
 #We want to try and make it functional!
 #Can I evn make the control funcitons funcitonal?
 #I guess we could just have it carry out the operations
