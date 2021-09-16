@@ -45,7 +45,7 @@ def main():
     pydirectinput.moveTo(400, 400)
     pydirectinput.click()
     pydirectinput.click()
-    pydirectinput.moveTo(600, 600)
+    pydirectinput.moveTo(700, 700)
     pydirectinput.click()
     #screenregions = [320,908 (bottomleft) 1600 145 (top Right) ]
     #[320, 145, 1280, 763] left,top width, height
@@ -53,13 +53,26 @@ def main():
     #Going to assume healthbars are on, will add a check funciton in the future.
     imHealthBars = pyautogui.screenshot(region=(320, 145, 1280, 763))
     pydirectinput.press('c')
-    imNoHealthBars = pyautogui.screenshot(region=(320, 145, 1280, 763))
+    imNoHealthBars = pyautogui.screenshot()#region=(320, 145, 1280, 763))
     pydirectinput.press('c')
-    champion = "Zac"
-    imHealthBars.save("./HoldTestImages/healthbars" + champion + ".jpg", "JPEG")
-    imNoHealthBars.save("./HoldTestImages/nohealthbars" + champion + ".jpg", "JPEG")
+    imgName = "Zac"
+    #imHealthBars.save("./HoldTestImages/healthbars" + champion + ".jpg", "JPEG")
+    #imNoHealthBars.save("./HoldTestImages/nohealthbars" + champion + ".jpg", "JPEG")
+    hexList = [[690, 615, "Draven1Star2"], [870,615,"MissFortune1Star2"],
+    [1190, 560,"Olaf1Star2"], [960, 510,"Lucian1Star2"]]
 
-    
+    diffX = 15
+    diffY = 40
+    for i in hexList:
+        testHold = imNoHealthBars.crop((i[0]-diffX, i[1]-diffY, i[0]+diffX, i[1]+diffY/2))
+        #testHold = imNoHealthBars.crop((i[0]-15, i[1]-40, i[0]+15, i[1]+20))
+        testHold.save("./HoldTestImages/ "+i[2] + ".jpg", "JPEG")
+    '''
+    -Get variety of test photos
+    Either identify the star power right away
+    or identify the champion first and then identify the powerlevel after.
+    But check if its possible first.
+    '''
 
 
 
