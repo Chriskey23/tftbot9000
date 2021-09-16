@@ -2,7 +2,7 @@
 #Functions to control the game
 
 import pyautogui
-
+import pydirectinput
 '''
 Letssay the game wants to move items from x to y
 to use item x on slot y
@@ -33,33 +33,32 @@ def initAndCheckProperSettings():
 
 
 def buyExp():
-    pyautogui.press('f')
+    pydirectinput.press('f')
 
 def rerollShop():
-    pyautogui.press('d')
+    pydirectinput.press('d')
 
 #Input everything to keep it funcitonal
 #Should I update and return the states too?
 def buyXPosition(pos,shopCoordinates, shopState, benchState, boardState, currentGold):
-    pyautogui.moveTo(pos)
-    #This has a slight delay so it registers in game
-    #.click() is not regetered in game
-    #I think its because it is inhumanly fast.
-    pyautogui.mouseDown();pyautogui.mouseUp()
+    pydirectinput.moveTo(pos)
+    pydirectinput.dragTo(pos[0]+15, pos[1]+15, 0.12, button="left")
+
 
 
 
 def dragXPosToYPos(xCord, yCord, boardState, benchState):
-    pyautogui.moveTo(xCord[0], xCord[1])
+    pydirectinput.moveTo(xCord[0], xCord[1])
     pyautogui.dragTo(yCord[0], yCord[1],0.12,pyautogui.easeInQuad, button="left", )
     
 
 def sellXPos(xCord, boardState, benchState, currentGold):
     pyautogui.moveTo(xCord[0], xCord[1])
-    pyautogui.press('e')
+    pydirectinput.press('e')
 
 def toggleHealthBars():
-    pyautogui.press('c')
+    pydirectinput.press('c')
+
 
 '''
 def getGameState():
