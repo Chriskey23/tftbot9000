@@ -1,5 +1,6 @@
+from os import pipe
 from PIL import Image, ImageStat, ImageFilter, ImageShow
-
+import numpy as np
 def main():
     rakan = [Image.open("./HoldTestImages/Rakan1Star1.jpg"), 
     Image.open("./HoldTestImages/Rakan1Star2.jpg"), 
@@ -19,27 +20,35 @@ def main():
     Image.open("./HoldTestImages/Dianna1Star2.jpg"),
     Image.open("./HoldTestImages/Dianna1Star3.jpg")]
 
-    rakanStats = list(map(ImageStat.Stat, rakan))
-    syndraStats= list(map(ImageStat.Stat, syndra))
-    lucianStats = list(map(ImageStat.Stat, lucian))
-    #test = ImageStat.Stat(rakan[0])
     print("RAKAN")
-    for i in rakanStats:
-        checkFunc(i)
+    rakanStats = list(map(pipeLine, rakan))
     print("SYNDRA")
-    for i in syndraStats:
-        checkFunc(i)
+    syndraStats= list(map(pipeLine, syndra))
     print("LUCIAN")
-    for i in lucianStats:
-        checkFunc(i)
+    lucianStats = list(map(pipeLine, lucian))
+    print("DRAVEN")
+    dravenStats = list(map(pipeLine, draven))
+    print("MISSFORTUNE")
+    missfortuneStats = list(map(pipeLine, missfortune))
+    test = createAndApplyMask(olaf[0])
+    test.save("./testIMG.jpg", "JPEG")
 
-    
-    test = rakan[2].filter(ImageFilter.CONTOUR)
-    test2 = ImageStat.Stat(test)
-    print("TEST")
-    checkFunc(test2)
-    test.save("./testImg.jpg", "JPEG")
-    #print(type(rakan[0]))
+def pipeLine(img):
+    img = createAndApplyMask(img)
+    stats = ImageStat.Stat(img)
+    checkFunc(stats)
+    return img
+
+def createAndApplyMask(img):
+    mask = img.filter(ImageFilter.FIND_EDGES)
+    mask = mask.filter(ImageFilter.GaussianBlur(radius=2))
+    maskArr = np.array(mask)
+    maskArr = maskArr[:,:,2]<45
+    imgArr = np.array(img)
+    imgArr[maskArr] = 0
+    img = Image.fromarray((imgArr))
+    return img
+
 def checkFunc(x):
     print(x.rms)
 
