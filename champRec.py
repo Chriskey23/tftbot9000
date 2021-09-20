@@ -2,42 +2,48 @@ from os import pipe
 from PIL import Image, ImageStat, ImageFilter, ImageShow
 import numpy as np
 def main():
-    rakan = [Image.open("./HoldTestImages/Rakan1Star1.jpg"), 
-    Image.open("./HoldTestImages/Rakan1Star2.jpg"), 
-    Image.open("./HoldTestImages/Rakan1Star3.jpg")] 
-    lucian = [Image.open("./HoldTestImages/Lucian1Star1.jpg"), 
-    Image.open("./HoldTestImages/Lucian1Star2.jpg")]
-    olaf = [Image.open("./HoldTestImages/Olaf1Star1.jpg"),
-     Image.open("./HoldTestImages/Olaf1Star2.jpg")]
-    syndra = [Image.open("./HoldTestImages/Syndra1Star1.jpg"),
-    Image.open("./HoldTestImages/Syndra1Star2.jpg"),
-    Image.open("./HoldTestImages/Syndra1Star3.jpg")]
-    draven = [Image.open("./HoldTestImages/Draven1Star1.jpg"),
-    Image.open("./HoldTestImages/Draven1Star2.jpg")]
-    missfortune = [Image.open("./HoldTestImages/MissFortune1Star1.jpg"),
-    Image.open("./HoldTestImages/MissFortune1Star2.jpg")]
-    dianna = [Image.open("./HoldTestImages/Dianna1Star1.jpg"),
-    Image.open("./HoldTestImages/Dianna1Star2.jpg"),
-    Image.open("./HoldTestImages/Dianna1Star3.jpg")]
+    #Inital files
+    championFileDirSets = [("rakan", ["./HoldTestImages/Rakan1Star1.jpg", "./HoldTestImages/Rakan1Star2.jpg", "./HoldTestImages/Rakan1Star3.jpg"]), 
+    ("lucian", ["./HoldTestImages/Lucian1Star1.jpg", "./HoldTestImages/Lucian1Star2.jpg", "./HoldTestImages/Lucian1Star3.jpg"]),
+    ("olaf", ["./HoldTestImages/Olaf1Star1.jpg", "./HoldTestImages/Olaf1Star2.jpg", "./HoldTestImages/Olaf1Star3.jpg"]), 
+    ("syndra", ["./HoldTestImages/Syndra1Star1.jpg", "./HoldTestImages/Syndra1Star2.jpg", "./HoldTestImages/Syndra1Star3.jpg"]),
+    ("draven", ["./HoldTestImages/Draven1Star1.jpg", "./HoldTestImages/Draven1Star2.jpg", "./HoldTestImages/Draven1Star3.jpg"]), 
+    ("missfortune", ["./HoldTestImages/MissFortune1Star1.jpg", "./HoldTestImages/MissFortune1Star2.jpg", "./HoldTestImages/MissFortune1Star3.jpg"]), 
+    ("dianna", ["./HoldTestImages/Dianna1Star1.jpg", "./HoldTestImages/Dianna1Star2.jpg", "./HoldTestImages/Dianna1Star3.jpg"])]
+    
+    testFileSet =  []
+    
+    #Get images
+    championImgSet = []
+    for i in championFileDirSets:
+        holdImgs = []
+        for j in i[1]:
+            holdImgs.append(Image.open(j))
+        championImgSet.append( (i[0], holdImgs))
 
-    print("RAKAN")
-    rakanStats = list(map(pipeLine, rakan))
-    print("SYNDRA")
-    syndraStats= list(map(pipeLine, syndra))
-    print("LUCIAN")
-    lucianStats = list(map(pipeLine, lucian))
-    print("DRAVEN")
-    dravenStats = list(map(pipeLine, draven))
-    print("MISSFORTUNE")
-    missfortuneStats = list(map(pipeLine, missfortune))
-    test = createAndApplyMask(olaf[0])
-    test.save("./testIMG.jpg", "JPEG")
+
+    #Get Stats
+    championStatSet = []
+    for i in championImgSet:
+        holdStats = []
+        for j in i[1]:
+            holdStats.append(pipeLine(j))
+        championStatSet.append( (i[0], holdStats))  
+    #print("DIANNA")
+    #diannaStats = list(map(pipeLine, dianna))
+    for i in championStatSet:
+        print(i[0])
+        for j in i[1]:
+            print(j.var)
+    
+    #test = createAndApplyMask(olaf[0])
+    #test.save("./testIMG.jpg", "JPEG")
 
 def pipeLine(img):
     img = createAndApplyMask(img)
     stats = ImageStat.Stat(img)
-    checkFunc(stats)
-    return img
+    #checkFunc(stats)
+    return stats
 
 def createAndApplyMask(img):
     mask = img.filter(ImageFilter.FIND_EDGES)
