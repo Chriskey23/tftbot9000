@@ -50,7 +50,12 @@ def createAndApplyMask(img):
     return img
 
 def checkFunc(x):
+    print("Root Mean Square =", end=" ")
     print(x.rms)
+    print("Variance =", end=" ")
+    print(x.var)
+    print("Sum", end=" ")
+    print(x.sum)
 
 if __name__ == "__main__":
     main()
