@@ -11,7 +11,12 @@ def main():
     ("missfortune", ["./HoldTestImages/MissFortune1Star1.jpg", "./HoldTestImages/MissFortune1Star2.jpg", "./HoldTestImages/MissFortune1Star3.jpg"]), 
     ("dianna", ["./HoldTestImages/Dianna1Star1.jpg", "./HoldTestImages/Dianna1Star2.jpg", "./HoldTestImages/Dianna1Star3.jpg"])]
     
-    testFileSet =  []
+    testFileSet =  [("rakan", "./HoldTestImages/RakanTest1.jpg"), 
+    ("lucian", "./HoldTestImages/LucianTest1.jpg"), 
+    ("olaf", "./HoldTestImages/OlafTest1.jpg"), 
+    ("missfortune", "./HoldTestImages/MissFortuneTest1.jpg"), 
+    ("dianna", "./HoldTestImages/DiannaTest1.jpg"),
+    ("dianna", "./HoldTestImages/DiannaTest2.jpg")]
     
     #Get images
     championImgSet = []
@@ -20,7 +25,11 @@ def main():
         for j in i[1]:
             holdImgs.append(Image.open(j))
         championImgSet.append( (i[0], holdImgs))
-
+    testImgSet = []
+    for i in testFileSet:
+        testImgSet.append( (i[0], Image.open(i[1])))
+    
+        
 
     #Get Stats
     championStatSet = []
@@ -28,7 +37,12 @@ def main():
         holdStats = []
         for j in i[1]:
             holdStats.append(pipeLine(j))
-        championStatSet.append( (i[0], holdStats))  
+        championStatSet.append( (i[0], holdStats)) 
+    testStatSet = []
+    for i in testImgSet:
+        testStatSet.append((i[0], pipeLine(i[1])))
+    
+    
     #print("DIANNA")
     #diannaStats = list(map(pipeLine, dianna))
     for i in championStatSet:
