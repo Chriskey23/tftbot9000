@@ -42,7 +42,6 @@ def main():
     for i in testImgSet:
         testStatSet.append((i[0], pipeLine(i[1])))
     
-    
     #print("DIANNA")
     #diannaStats = list(map(pipeLine, dianna))
     for i in championStatSet:
@@ -50,8 +49,42 @@ def main():
         for j in i[1]:
             print(j.var)
     
+    setOfMins = []
+    for i in testStatSet:
+        holdMin = None
+        print("Test  Champion = " + i[0])
+        for j in championStatSet:
+            print("VS " + j[0] + " = ", end="")
+            hold = sum(compareFunction(i[1], j[1]))
+            print(hold)
+            if holdMin == None:
+                holdMin = (j[0],hold)
+            elif holdMin[1] > hold:
+                holdMin = (j[0],hold)
+        setOfMins.append( (i[0], holdMin[0], holdMin[1]))
+
+    for i in setOfMins:
+        print(i) 
+    print(championStatSet[0][0] + "  " + testStatSet[0][0])
+    print( list(a-b for (a,b) in zip(championStatSet[0][1][0].var,testStatSet[0][1].var)))
+
+    print("Check")
+    print(testStatSet[0][1].sum)
     #test = createAndApplyMask(olaf[0])
     #test.save("./testIMG.jpg", "JPEG")
+
+def compareFunction(testStats, champSetStats):
+    #[ stats1, stats2, stats3]
+    #stats
+    total = [0,0,0]
+    for i in champSetStats:
+        a = i.rms
+        b = testStats.rms
+        total[0] += (a[0]-b[0])**2
+        total[1] += (a[1]-b[1])**2
+        total[2] += (a[2]-b[2])**2
+    return total
+
 
 def pipeLine(img):
     img = createAndApplyMask(img)
