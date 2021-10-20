@@ -1,3 +1,8 @@
+import controller as ctr
+import ai
+
+import pyautogui
+
 def main():
     #Start Game
 
@@ -7,15 +12,34 @@ def main():
 
     #Check initial settings are propper.
 
+    #Object Setup
+    gameState = ctr.contrgameStateObj()
+    idSet = ctr.idenfityCollection()
 
-    #Game AI Loop
-    gameIsRunning = True
+    gameIsRunning = False
+    #Game loop
     while(gameIsRunning):
-        #We probably only make decision in planning stage
-        #Check and set timer, then check till fighting is done
-        #Timer interupts AI and then starts it again when planning starts
-        gameState = getCurrentGameState()
+        #Check for phase and handle transition
+        screen = pyautogui.screenshot()
+        if gameState.phase is "carousel":
+            carouselCheck = ctr.tempateMatchList(screen.crop(), idSet.carouselPair, )
+            if not(ctr.templateMatchList):
+                #Empty list therefor not match therefor planning stage
+                gameState = ctr.handleCarousel(gameState, idSet)
+        elif gameState.phase is "planning":
+            res = ctr.checkPixel(idSet.planWarnColor, idSet.planWarnPos, screen)
+            if not(res) and gameState.planFlag:
+                gameState.phase = "setup"
+            elif res and not(gameState.planFlag):
+                gameState.planFlag = True   
+        elif gameState.phase is "setup":
+            if ctr.checkPixel(idSet.fightColor, idSet.fightColPos, screen):
+                gameState.phase = "fighting"
+        elif gameState.phase is "fighting":
+            if not(ctr.checkPixel(idSet.fightColor, idSet.fightColPos, screen)):
+                gameState = ctr.fightTransition(gameState, screen)
+        else:
+            raise Exception("Error: Not one of possible phases!")
 
-        #If game ends or something goes wrong, return false! 
-        gameIsRunning = makeNextDecision(gameState)
-    
+        #Give ai currentgame state and let it make decision
+        gameState = ai.makeNextDecision(gameState)

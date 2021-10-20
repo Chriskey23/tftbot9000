@@ -30,7 +30,7 @@ def main():
 (990, 690), (1075, 690), (1165, 690), (1250, 690)]
     itemBenchCoordinates = [(480, 680), (510, 655), (490, 635), (520, 615), (502, 594), 
 (508, 565), (558, 614), (543, 590), (550, 565), (585, 590)]
-    boardCoordinats = [(690, 615), (780, 615), (870, 615), (960, 615), (1050, 615), 
+    boardCoordinates = [(690, 615), (780, 615), (870, 615), (960, 615), (1050, 615), 
 (1140, 615), (1230, 615), (650, 560), (740, 560), (830, 560), (920, 560), (1010, 560),
 (1100 ,560), (1190, 560), (700, 510), (790, 510), (875, 510), (960, 510), (1050, 510),
 (1130, 510), (1220, 510), (675, 460), (750, 460), (840, 460), (920, 460), (1000, 460),
@@ -43,116 +43,54 @@ def main():
 
     #Selects and gets game window to be primary!
     pydirectinput.moveTo(400, 400)
-    pydirectinput.click()
-    pydirectinput.click()
-    pydirectinput.moveTo(700, 700)
-    pydirectinput.click()
-    #screenregions = [320,908 (bottomleft) 1600 145 (top Right) ]
-    #[320, 145, 1280, 763] left,top width, height
+    pydirectinput.mouseDown(button="left")
+    pydirectinput.mouseUp(button="left")
+    
+    winSizeList = [("./HoldTestImages/2045Test/",[20,45]) , ("./HoldTestImages/2545Test/",[25,45]), 
+    ("./HoldTestImages/1540Test/",[15,40])]
+    champion = ["dianna", benchCoordinates[0]]
+    positionList = [boardGrid[0][2], boardGrid[2][1], boardGrid[3][5], boardGrid[1][6]]
 
-    #Going to assume healthbars are on, will add a check funciton in the future.
-    imHealthBars = pyautogui.screenshot(region=(320, 145, 1280, 763))
+
+    getTestData(champion, positionList, winSizeList)
+
+
+def saveImgWindow(img, name, window):
+    img = img.crop(window)
+    img.save(name, "JPEG")
+
+def getTestData(champion, positionList, winSizeList):
+    count = 0
+
+    #Take photo of initial baord position
+    _,imNoHealthBars = takeScreenShots()
+    for j in winSizeList:
+        imgName = j[0]+champion[0]+str(count)+".jpg"
+        window = (champion[1][0] - j[1][0], champion[1][1]-j[1][1], champion[1][0]+j[1][0], champion[1][1]+j[1][1])
+        tmp = imNoHealthBars.crop(window)
+        tmp.save(imgName, "JPEG")
+    count += 1
+    
+    for i in positionList:
+        controller.dragXPosToYPos(champion[1], i, None, None)
+        champion[1]=i
+        pydirectinput.moveTo(430, 600)
+        _,imNoHealthBars = takeScreenShots()
+        for j in winSizeList:
+            imgName = j[0] + champion[0] + str(count) +".jpg"
+            window = (champion[1][0] - j[1][0], champion[1][1]-j[1][1], champion[1][0]+j[1][0], champion[1][1]+j[1][1])
+            tmp = imNoHealthBars.crop(window)
+            tmp.save(imgName, "JPEG")
+        count += 1
+        
+
+    
+def takeScreenShots():
+    imHealthBars = pyautogui.screenshot(region=(320,145,1280,763))
     pydirectinput.press('c')
-    imNoHealthBars = pyautogui.screenshot()#region=(320, 145, 1280, 763))
+    imNoHealthBars = pyautogui.screenshot()
     pydirectinput.press('c')
-    imgName = "Zac"
-    #imHealthBars.save("./HoldTestImages/healthbars" + champion + ".jpg", "JPEG")
-    #imNoHealthBars.save("./HoldTestImages/nohealthbars" + champion + ".jpg", "JPEG")
-    hexList = [[690, 615, "Draven1Star2"], [870,615,"MissFortune1Star2"],
-    [1190, 560,"Olaf1Star2"], [960, 510,"Lucian1Star2"]]
-
-    diffX = 15
-    diffY = 40
-    for i in hexList:
-        testHold = imNoHealthBars.crop((i[0]-diffX, i[1]-diffY, i[0]+diffX, i[1]+diffY/2))
-        #testHold = imNoHealthBars.crop((i[0]-15, i[1]-40, i[0]+15, i[1]+20))
-        testHold.save("./HoldTestImages/ "+i[2] + ".jpg", "JPEG")
-    '''
-    -Get variety of test photos
-    Either identify the star power right away
-    or identify the champion first and then identify the powerlevel after.
-    But check if its possible first.
-    '''
-
-
-
-
-
-    
-    #imNoHealthBars.show()
-    
-    
-    '''
-    #Will need to check things like carosel, armour, stage
-
-    #boardChampions,benchChampions = getBoardState(imNoHealthBars)
-    #shopState = getBenchState(imHealthBars)
-
-    #Returns itemBench as well as updating items for all units with items
-    #itemBench, boardChampions = getItemState(itemBench, boardChampions, )
-
-    #playerState = getPlayerState()
-    #return (boardChampions,benchChampions,itemBench,shopState,playerState,gameStage)
-    '''
-
-
-    #Now do the swapping of side real quick
-
-'''
-shopCoordinates = [(689, 850), (828, 850), (970, 850), (1115, 850), (1250, 850)]
-benchCoordinates = [(570, 690), (650, 690), (735, 690), (825, 690), (910, 690),
-(990, 690), (1075, 690), (1165, 690), (1250, 690)]
-itemBenchCoordinates = [(480, 680), (510, 655), (490, 635), (520, 615), (502, 594), 
-(508, 565), (558, 614), (543, 590), (550, 565), (585, 590)]
-boardCoordinats = [(690, 615), (780, 615), (870, 615), (960, 615), (1050, 615), 
-(1140, 615), (1230, 615), (650, 560), (740, 560), (830, 560), (920, 560), (1010, 560),
-(1100 ,560), (1190, 569), (700, 510), (790, 510), (875, 510), (960, 510), (1050, 510),
-(1130, 510), (1220, 510), (675, 460), (750, 460), (840, 460), (920, 460), (1000, 460),
-(1080, 460), (1160, 460)]
-
-
-    pyautogui.moveTo(400, 400)
-    pyautogui.click()
-    im1 = pyautogui.screenshot(region=(875, 386,400, 300))
-
-    print(type(im1))
-    im1.show()
-    time.wait(20)
-    
-    screenWidth, screenHeight = pyautogui.size()
-    print(str(screenWidth) + " " + str(screenHeight))
-
-    #Testing moving and clicking
-    print(pyautogui.position())
-    pyautogui.moveTo(737, 685)
-    pyautogui.click()
-
-    pyautogui.moveTo(1080, 848)
-    pyautogui.mouseDown(button='left')
-    pyautogui.mouseUp(button='left')
-    
-    pyautogui.moveTo(737, 685)
-    pyautogui.click()
-    pyautogui.dragTo(1242, 705,button='left', duration=1)
-    pyautogui.dragTo(737, 685, button='left', duration=0.5)
-
-    pyautogui.moveTo(1080, 848)
-    pyautogui.drag(0,-100,button='left', duration=0.2)
-
-    pyautogui.moveTo(1082, 322)
-    pyautogui.click(button='right')
-
-    pyautogui.moveTo(534,833)
-    pyautogui.mouseDown(button='left')
-    pyautogui.mouseUp(button='left')
-
-    pyautogui.click(534,833, clicks=2, button='left')
-    pyautogui.moveTo(500,600)
-    pyautogui.click(button="left")
-    '''
-    #737,685
-    #1242 705
-
+    return imHealthBars, imNoHealthBars
 
 if __name__ == "__main__":
     main()
